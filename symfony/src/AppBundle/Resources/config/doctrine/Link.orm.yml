@@ -1,0 +1,36 @@
+AppBundle\Entity\Link:
+    type: entity
+    table: null
+    repositoryClass: AppBundle\Repository\LinkRepository
+    id:
+        id:
+            type: integer
+            id: true
+            generator:
+                strategy: AUTO
+    fields:
+        createdAt:
+            type: datetime
+            column: created_at
+        message:
+            type: text
+        link:
+            type: text
+        slackId:
+            type: string
+            length: 255
+    manyToOne:
+        user:
+            targetEntity: XTeam\HighFiveSlackBundle\Entity\User
+            inversedBy: highFives
+            cascade: [persist]
+            joinColumn:
+                name: user_id
+                referencedColumnName: id
+        channel:
+            targetEntity: XTeam\HighFiveSlackBundle\Entity\Channel
+            inversedBy: highFivesPublished
+            cascade: [persist]
+            joinColumn:
+                name: channel_id
+                referencedColumnName: id

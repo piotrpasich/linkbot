@@ -1,0 +1,22 @@
+XTeam\HighFiveSlackBundle\Entity\Type:
+    type: entity
+    table: null
+    repositoryClass: XTeam\HighFiveSlackBundle\Entity\TypeRepository
+    id:
+        id:
+            type: integer
+            id: true
+            generator:
+                strategy: AUTO
+    fields:
+        name:
+            type: string
+            length: 255
+        pattern:
+            type: string
+            length: 255
+    oneToMany:
+        highFives:
+            targetEntity: HighFive
+            mappedBy: type
+    lifecycleCallbacks: {  }

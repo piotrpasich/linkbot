@@ -1,0 +1,4 @@
+x_team_slack_messenger_send:
+    path:      /v1/message/post
+    methods:   [POST]
+    defaults: { _controller: x_team_slack_messenger.controller.message:sendAction }

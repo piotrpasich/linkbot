@@ -1,0 +1,21 @@
+XTeam\HighFiveSlackBundle\Entity\Channel:
+    type: entity
+    table: null
+    repositoryClass: XTeam\HighFiveSlackBundle\Entity\ChannelRepository
+    id:
+        id:
+            type: integer
+            id: true
+            generator:
+                strategy: AUTO
+    fields:
+        slackId:
+            type: string
+        name:
+            type: string
+            length: 255
+    oneToMany:
+        highFives:
+            targetEntity: HighFive
+            mappedBy: channel
+    lifecycleCallbacks: {  }

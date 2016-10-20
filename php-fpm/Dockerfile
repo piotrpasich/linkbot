@@ -14,9 +14,11 @@ RUN apk add --update \
     php5-mcrypt \
     php5-mysql \
     php5-opcache \
+    php5-dom \
     php5-openssl \
     php5-pdo \
     php5-pdo_mysql \
+    php5-ctype \
     php5-mysqli \
     php5-xml \
     php5-zlib

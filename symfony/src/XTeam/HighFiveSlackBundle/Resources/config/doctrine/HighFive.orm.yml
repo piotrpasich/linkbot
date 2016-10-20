@@ -1,0 +1,50 @@
+XTeam\HighFiveSlackBundle\Entity\HighFive:
+    type: entity
+    table: null
+    repositoryClass: XTeam\HighFiveSlackBundle\Entity\HighFiveRepository
+    id:
+        id:
+            type: integer
+            id: true
+            generator:
+                strategy: AUTO
+    fields:
+        createdAt:
+            type: datetime
+            column: created_at
+    manyToOne:
+        publisher:
+            targetEntity: User
+            inversedBy: highFives
+            cascade: [persist]
+            joinColumn:
+                name: publisher_id
+                referencedColumnName: id
+        channel:
+            targetEntity: Channel
+            inversedBy: highFivesPublished
+            cascade: [persist]
+            joinColumn:
+                name: channel_id
+                referencedColumnName: id
+        type:
+            targetEntity: Type
+            inversedBy: highFives
+            joinColumn:
+                name: type_id
+                referencedColumnName: id
+    manyToMany:
+        receivers:
+            targetEntity: User
+            cascade: [persist]
+            joinTable:
+                name: high_fives_receivers
+                joinColumns:
+                    high_five_id:
+                        referencedColumnName: id
+                        unique: false
+                inverseJoinColumns:
+                    receiver_id:
+                        referencedColumnName: id
+                        unique: false
+

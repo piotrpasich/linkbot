@@ -17,3 +17,7 @@ parameters:
 
     # A secret key that's used to generate certain security-related tokens
     secret:            ThisTokenIsNotSoSecretChangeIt
+    slack.token: gal4iaH12ewGJ2EWHcQq2KOE
+    xteam.highfive.message: "High five heroes! |chart|"
+    xteam.highfive.base_url: "http://localhost"
+    xteam.highfive.publish_channel: "#test"

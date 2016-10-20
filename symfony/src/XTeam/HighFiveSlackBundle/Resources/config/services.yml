@@ -1,0 +1,58 @@
+imports:
+    - { resource: "repositories.yml" }
+
+services:
+    x_team_high_five_slack.builder.channel:
+        class: XTeam\HighFiveSlackBundle\Builder\ChannelEntityBuilder
+        arguments:
+            - "@x_team_high_five_slack.repository.channel"
+
+    x_team_high_five_slack.builder.user:
+        class: XTeam\HighFiveSlackBundle\Builder\UserEntityBuilder
+        arguments:
+            - "@x_team_high_five_slack.repository.user"
+
+    x_team_high_five_slack.mapper.high_five:
+        class: XTeam\HighFiveSlackBundle\Mapper\HighFiveMapper
+        arguments:
+            - "@x_team_high_five_slack.builder.user"
+            - "@x_team_high_five_slack.builder.channel"
+            - "@x_team_high_five_slack.parser.mentions_message_parser"
+            - "@x_team_high_five_slack.parser.type_message_parser"
+
+    x_team_high_five_slack.listener.message_receiver:
+        class: XTeam\HighFiveSlackBundle\Listener\MessageListener
+        arguments:
+            - "@x_team_high_five_slack.mapper.high_five"
+            - "@doctrine.orm.default_entity_manager"
+        tags:
+            - { name: kernel.event_listener, event: slack.message_received, method: receiveMessage }
+            - { name: kernel.event_listener, event: xteam.five.message_received, method: receiveMessage }
+
+    x_team_high_five_slack.data_provider.slack_user_provider:
+        class: XTeam\HighFiveSlackBundle\DataProvider\SlackUserProvider
+        arguments:
+            - "@x_team_slack_messenger.slack.api.client"
+            - "@x_team_high_five_slack.builder.user"
+            - "@x_team_slack_messenger.builder.slack_api_user_builder"
+
+    x_team_high_five_slack.parser.mentions_message_parser:
+        class: XTeam\HighFiveSlackBundle\Message\Parser\MentionsMessageParser
+        arguments:
+            - "@x_team_high_five_slack.data_provider.slack_user_provider"
+
+    x_team_high_five_slack.parser.type_message_parser:
+        class: XTeam\HighFiveSlackBundle\Message\Parser\TypeMessageParser
+        arguments:
+            - "@x_team_high_five_slack.repository.type"
+
+    x_team_high_five_slack.chart.high_five_chart_drawer:
+        class: XTeam\HighFiveSlackBundle\Chart\HighFiveChartDrawer
+
+    x_team_high_five_slack.controller.chart:
+         class: XTeam\HighFiveSlackBundle\Controller\ChartController
+         arguments:
+            - "@event_dispatcher"
+            - "@x_team_high_five_slack.chart.high_five_chart_drawer"
+            - "@x_team_high_five_slack.repository.high_five"
+

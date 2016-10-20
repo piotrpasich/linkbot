@@ -1,0 +1,21 @@
+XTeam\HighFiveSlackBundle\Entity\User:
+    type: entity
+    table: null
+    repositoryClass: XTeam\HighFiveSlackBundle\Entity\UserRepository
+    id:
+        id:
+            type: string
+            id: true
+    fields:
+        name:
+            type: string
+            length: 255
+    oneToMany:
+        highFivesPublished:
+            targetEntity: HighFive
+            mappedBy: publisher
+    manyToMany:
+        highFivesReceived:
+            targetEntity: HighFive
+            inversedBy: receiver
+    lifecycleCallbacks: {  }

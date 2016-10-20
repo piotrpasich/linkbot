@@ -1,0 +1,8 @@
+x_team_high_five_slack_chart:
+    path:      /highfive/chart
+    defaults: { _controller: x_team_high_five_slack.controller.chart:showAction }
+
+x_team_high_five_slack_chart_period:
+    path:      /highfive/chart/{period}
+    defaults: { _controller: x_team_high_five_slack.controller.chart:showAction }
+

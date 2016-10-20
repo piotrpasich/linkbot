@@ -1,0 +1,44 @@
+services:
+     x_team_slack_messenger.slack.api.client:
+         class:  CL\Slack\Transport\ApiClient
+         arguments:
+            - "%slack.token%"
+            - ~
+            - ~
+            - ~
+            - "@event_dispatcher"
+
+     x_team_slack_messenger.builder.api_slack_message_builder:
+         class: XTeam\SlackMessengerBundle\Builder\SlackAPIMessageBuilder
+
+     x_team_slack_messenger.builder.api_object_message_builder:
+         class: XTeam\SlackMessengerBundle\Builder\ObjectMessageBuilder
+
+     x_team_slack_messenger.builder.slack_api_user_builder:
+         class: XTeam\SlackMessengerBundle\Builder\SlackAPIUserBuilder
+
+     x_team_slack_messenger.controller.message:
+         class: XTeam\SlackMessengerBundle\Controller\MessageController
+         arguments:
+            - "@event_dispatcher"
+            - "@x_team_slack_messenger.builder.api_slack_message_builder"
+            - "@doctrine.orm.default_entity_manager"
+
+     x_team_slack_messenger.slack.publisher:
+         class: XTeam\SlackMessengerBundle\Publisher\SlackApiMessagePublisher
+         arguments:
+            - "@x_team_slack_messenger.slack.api.client"
+
+     x_team_slack_messenger.slack.provider:
+         class: XTeam\SlackMessengerBundle\Provider\SlackApiMessageProvider
+         arguments:
+            - "@x_team_slack_messenger.slack.api.client"
+            - "@x_team_slack_messenger.builder.api_object_message_builder"
+
+
+     x_team_slack_messenger.slack.users.provider:
+         class: XTeam\SlackMessengerBundle\Provider\SlackApiUsersProvider
+         arguments:
+            - "@x_team_slack_messenger.slack.api.client"
+            - "@x_team_slack_messenger.builder.slack_api_user_builder"
+

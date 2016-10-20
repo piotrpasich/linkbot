@@ -1,0 +1,24 @@
+services:
+    x_team_high_five_slack.repository.user:
+        class: Doctrine\ORM\EntityRepository
+        factory: ["@doctrine", getRepository]
+        arguments:
+            - XTeamHighFiveSlackBundle:User
+
+    x_team_high_five_slack.repository.channel:
+        class: Doctrine\ORM\EntityRepository
+        factory: ["@doctrine", getRepository]
+        arguments:
+            - XTeamHighFiveSlackBundle:Channel
+
+    x_team_high_five_slack.repository.type:
+        class: Doctrine\ORM\EntityRepository
+        factory: ["@doctrine", getRepository]
+        arguments:
+            - XTeamHighFiveSlackBundle:Type
+
+    x_team_high_five_slack.repository.high_five:
+        class: Doctrine\ORM\EntityRepository
+        factory: ["@doctrine", getRepository]
+        arguments:
+            - XTeamHighFiveSlackBundle:HighFive

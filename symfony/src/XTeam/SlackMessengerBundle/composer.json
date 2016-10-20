@@ -1,0 +1,30 @@
+{
+    "name": "xteam/slackmessengerbundle",
+    "description": "An integration bundle with slack",
+    "type": "symfony-bundle",
+    "require": {
+        "guzzlehttp/guzzle": ">=4.2",
+        "phpunit/phpunit": "^4.7",
+        "phpspec/phpspec": "^2.2",
+        "cleentfaar/slack": "0.18.1",
+        "php": ">=5.5",
+        "symfony/framework-bundle": ">=3.0"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Piotr Pasich",
+            "email": "piotr.pasich@x-team.com"
+        }
+    ],
+    "scripts": {
+      "test": [
+        "php vendor/phpunit/phpunit/phpunit",
+        "php vendor/phpspec/phpspec/bin/phpspec run"
+      ]
+    },
+    "minimum-stability": "dev",
+    "autoload": {
+      "psr-4": { "XTeam\\SlackMessengerBundle\\": "" }
+    }
+}

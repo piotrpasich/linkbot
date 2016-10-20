@@ -1,0 +1,23 @@
+services:
+
+    app.repository.link:
+        class: Doctrine\ORM\EntityRepository
+        factory: ["@doctrine", getRepository]
+        arguments:
+            - 'AppBundle:Link'
+
+    app.listener.message_receiver:
+        class: AppBundle\EventListener\MessageReceivedEventListener
+        arguments:
+            - "@app.repository.link"
+            - "@doctrine.orm.default_entity_manager"
+            - "@app.mapper.link"
+        tags:
+            - { name: kernel.event_listener, event: message.received, method: receiveMessage }
+
+    app.mapper.link:
+        class: AppBundle\Mapper\LinkMapper
+        arguments:
+            - "@x_team_high_five_slack.builder.user"
+            - "@x_team_high_five_slack.builder.channel"
+
