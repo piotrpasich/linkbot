@@ -24,6 +24,8 @@ AppBundle\Entity\Link:
             length: 255
         reactionsCount:
             type: integer
+        sent:
+            type: boolean
     manyToOne:
         user:
             targetEntity: XTeam\HighFiveSlackBundle\Entity\User

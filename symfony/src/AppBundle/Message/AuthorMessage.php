@@ -4,7 +4,7 @@ namespace AppBundle\Message;
 
 use AppBundle\Entity\Link;
 
-class WebsiteMessage extends MessageDecorator
+class AuthorMessage extends MessageDecorator
 {
     /**
      * @var Link
@@ -15,7 +15,6 @@ class WebsiteMessage extends MessageDecorator
     {
         parent::__construct($messageDecorator);
         $this->link = $link;
-        var_dump($link);die();
     }
 
     public function getMessage()
@@ -26,7 +25,13 @@ class WebsiteMessage extends MessageDecorator
             $message = $this->messageDecorator->getMessage();
         }
 
-        $url = $this->link->getLink();
+        $link = $this->link->getLink();
+
+        return sprintf("[%s just published this on #%s]\n%s",
+            $this->link->getUser()->getName(),
+            $this->link->getChannel()->getName(),
+            $this->link->getMessage()
+            );
     }
 
 }

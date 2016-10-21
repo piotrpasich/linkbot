@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "6ea386be724ca15d5f8a2b64e54cd10e",
-    "content-hash": "dc5c0ea03406cae0e04254fe8ce0ae8d",
+    "hash": "e897c1372851b45bad418a7d1b933cce",
+    "content-hash": "6c025ef01d55b364328e21070df92698",
     "packages": [
         {
             "name": "cleentfaar/slack",
@@ -834,6 +834,94 @@
                 "orm"
             ],
             "time": "2016-09-10 18:51:13"
+        },
+        {
+            "name": "fusonic/linq",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/fusonic/linq.git",
+                "reference": "bff72e2e7ed8f2fb56eb228bbb9d7ff17be485e5"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/fusonic/linq/zipball/bff72e2e7ed8f2fb56eb228bbb9d7ff17be485e5",
+                "reference": "bff72e2e7ed8f2fb56eb228bbb9d7ff17be485e5",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.5.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^4.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Fusonic\\Linq": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Fusonic",
+                    "homepage": "http://www.fusonic.net"
+                }
+            ],
+            "description": "LINQ 2 objects class for PHP",
+            "homepage": "http://fusonic.github.io/fusonic-linq/",
+            "keywords": [
+                "linq",
+                "linq2objects"
+            ],
+            "time": "2016-03-01 17:05:55"
+        },
+        {
+            "name": "fusonic/opengraph",
+            "version": "1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/fusonic/opengraph.git",
+                "reference": "b5d50d176ee928cd9c099a0121349301562810f4"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/fusonic/opengraph/zipball/b5d50d176ee928cd9c099a0121349301562810f4",
+                "reference": "b5d50d176ee928cd9c099a0121349301562810f4",
+                "shasum": ""
+            },
+            "require": {
+                "fusonic/linq": "dev-master",
+                "guzzlehttp/guzzle": ">=4.0.0",
+                "php": ">=5.4.0",
+                "symfony/css-selector": ">=2.5.0",
+                "symfony/dom-crawler": ">=2.5.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Fusonic\\OpenGraph": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Fusonic",
+                    "homepage": "http://www.fusonic.net"
+                }
+            ],
+            "description": "PHP library for consuming and publishing Open Graph resources.",
+            "homepage": "https://github.com/fusonic/fusonic-opengraph",
+            "keywords": [
+                "opengraph"
+            ],
+            "time": "2014-07-23 20:05:38"
         },
         {
             "name": "guzzlehttp/guzzle",
@@ -2614,7 +2702,9 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": [],
+    "stability-flags": {
+        "fusonic/linq": 20
+    },
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {

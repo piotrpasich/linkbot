@@ -33,6 +33,7 @@ class ParseUsersCommand extends ContainerAwareCommand
             $userMatch = $userRepository->getOneById($user->getId());
             if (null != $userMatch) {
                 $userMatch->setName($user->getName());
+                $userMatch->setImage($user->getImage());
                 $em->persist($userMatch);
             }
         }

@@ -1,6 +1,8 @@
 <?php
 
 namespace AppBundle\Entity;
+use XTeam\HighFiveSlackBundle\Entity\Channel;
+use XTeam\HighFiveSlackBundle\Entity\User;
 
 
 /**
@@ -37,6 +39,7 @@ class Link
 
     private $slackId;
 
+    private $sent = false;
     /**
      * @var Slack TimeStamp
      */
@@ -74,7 +77,7 @@ class Link
     /**
      * Get user
      *
-     * @return \stdClass
+     * @return User
      */
     public function getUser()
     {
@@ -154,7 +157,7 @@ class Link
     }
 
     /**
-     * @return mixed
+     * @return Channel
      */
     public function getChannel()
     {
@@ -222,5 +225,21 @@ class Link
     public function setReactionsCount($reactionsCount)
     {
         $this->reactionsCount = $reactionsCount;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isSent()
+    {
+        return $this->sent;
+    }
+
+    /**
+     * @param boolean $sent
+     */
+    public function setSent($sent)
+    {
+        $this->sent = $sent;
     }
 }

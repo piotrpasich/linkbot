@@ -56,4 +56,9 @@ class LinkRepository extends EntityRepository
     {
         return $this->getEntityManager()->persist($link);
     }
+
+    public function findUnsent()
+    {
+        return $this->findBy(['sent' => 0]);
+    }
 }

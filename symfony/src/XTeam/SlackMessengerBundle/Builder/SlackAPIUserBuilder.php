@@ -13,6 +13,6 @@ class SlackAPIUserBuilder implements UserBuilderInterface
             throw new \InvalidArgumentException("The User should by type of CL\Slack\Model\User");
         }
 
-        return new User($user->getId(), $user->getName());
+        return new User($user->getId(), $user->getName(), $user->getProfile()->getImage48());
     }
 }

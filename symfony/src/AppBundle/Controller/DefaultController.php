@@ -17,7 +17,7 @@ class DefaultController extends Controller
     {
 
         $em = $this->get('doctrine.orm.default_entity_manager');
-        $links = $em->getRepository('AppBundle:Link')->findAll();
+        $links = $em->getRepository('AppBundle:Link')->findUnsent();
 
         foreach ($links as $link) {
             $this->get('event_dispatcher')->dispatch(LinkSentEvent::NAME, new LinkSentEvent($link));

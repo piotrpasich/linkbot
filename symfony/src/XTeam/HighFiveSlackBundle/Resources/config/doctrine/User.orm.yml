@@ -10,6 +10,9 @@ XTeam\HighFiveSlackBundle\Entity\User:
         name:
             type: string
             length: 255
+        image:
+            type: text
+            nullable: true
     oneToMany:
         highFivesPublished:
             targetEntity: HighFive

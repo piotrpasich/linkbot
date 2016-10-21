@@ -28,7 +28,7 @@ class DistributeCommand  extends ContainerAwareCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $em = $this->getContainer()->get('doctrine.orm.default_entity_manager');
-        $links = $em->getRepository('AppBundle:Link')->findAll();
+        $links = $em->getRepository('AppBundle:Link')->findUnsent();
 
         foreach ($links as $link) {
             $this->getContainer()->get('event_dispatcher')->dispatch(LinkSentEvent::NAME, new LinkSentEvent($link));
@@ -37,6 +37,6 @@ class DistributeCommand  extends ContainerAwareCommand
 
         $em->flush();
 
-        $output->writeln(sprintf("%d messages updated", count($links)));
+        $output->writeln(sprintf("%d messages sent", count($links)));
     }
 }

@@ -4,6 +4,7 @@ namespace AppBundle\EventListener;
 
 use AppBundle\Event\LinkSentEvent;
 use AppBundle\Mapper\LinkMapper;
+use AppBundle\Message\AuthorMessage;
 use AppBundle\Message\WebsiteMessage;
 use AppBundle\Repository\LinkRepository;
 use AppBundle\Voter\LinkVoter;
@@ -39,10 +40,14 @@ class MessageSendEventListener
         $payload = new ChatPostMessagePayload();
         $payload->setChannel($this->configuration['publish_channel']);
         $payload->setUsername($this->configuration['name']);
+        $payload->setIconUrl($link->getUser()->getImage());
+        $payload->setAsUser(false);
 
-        $message = new WebsiteMessage($link);
+        $message = new AuthorMessage($link);
         $payload->setText($message->getMessage());
 
-        $this->apiMessagePublisher->publish($payload);
+        $this->apiMessagePublisher->publishPayload($payload);
+
+        $link->setSent(true);
     }
 }

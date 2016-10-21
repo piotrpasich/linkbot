@@ -32,7 +32,7 @@ class ParseCommand  extends ContainerAwareCommand
         $messages = $this
             ->getContainer()
             ->get('x_team_slack_messenger.slack.provider')
-            ->getMessagesFromAllChannels($lastHighFiveTimestamp, ['test2']); //@papi @todo
+            ->getMessagesFromAllChannels($lastHighFiveTimestamp, $this->getContainer()->getParameter('slack.channels'));
 
         foreach ($messages as $message) {
             $this->getContainer()->get('event_dispatcher')->dispatch(MesssageReceivedEvent::NAME, new MesssageReceivedEvent($message));

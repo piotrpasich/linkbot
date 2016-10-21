@@ -30,6 +30,8 @@ class User
      */
     private $highFivesPublished;
 
+    private $image;
+
     public function __construct()
     {
         $this->highFivesReceived = new ArrayCollection();
@@ -93,5 +95,21 @@ class User
     public function getHighFivesPublished()
     {
         return $this->highFivesPublished;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getImage()
+    {
+        return $this->image;
+    }
+
+    /**
+     * @param mixed $image
+     */
+    public function setImage($image)
+    {
+        $this->image = $image;
     }
 }

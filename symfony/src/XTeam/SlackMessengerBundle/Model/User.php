@@ -18,10 +18,13 @@ class User
      */
     protected $name;
 
-    public function __construct($id, $name)
+    protected $image;
+
+    public function __construct($id, $name, $image = null)
     {
         $this->setId($id);
         $this->setName($name);
+        $this->setImage($image);
     }
 
     public function getId()
@@ -43,4 +46,22 @@ class User
     {
         $this->name = new Name($name);
     }
+
+    /**
+     * @return mixed
+     */
+    public function getImage()
+    {
+        return $this->image;
+    }
+
+    /**
+     * @param mixed $image
+     */
+    protected function setImage($image)
+    {
+        $this->image = $image;
+    }
+
+
 }
