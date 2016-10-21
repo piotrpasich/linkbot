@@ -33,4 +33,12 @@ class SlackApiMessagePublisher
 
         return $response->isOk();
     }
+
+    public function publishPayload(ChatPostMessagePayload $payload)
+    {
+        /** @var \CL\Slack\Payload\ChatPostMessagePayloadResponse $response */
+        $response = $this->apiClient->send($payload);
+
+        return $response->isOk();
+    }
 }

@@ -10,10 +10,18 @@ services:
         class: AppBundle\EventListener\MessageReceivedEventListener
         arguments:
             - "@app.repository.link"
-            - "@doctrine.orm.default_entity_manager"
             - "@app.mapper.link"
+            - "@app.voter.link"
         tags:
             - { name: kernel.event_listener, event: message.received, method: receiveMessage }
+
+    app.listener.message_sent:
+        class: AppBundle\EventListener\MessageSendEventListener
+        arguments:
+            - "@x_team_slack_messenger.slack.publisher"
+            - "%slack.linkbot%"
+        tags:
+            - { name: kernel.event_listener, event: message.sent, method: sentMessage }
 
     app.mapper.link:
         class: AppBundle\Mapper\LinkMapper
@@ -21,3 +29,12 @@ services:
             - "@x_team_high_five_slack.builder.user"
             - "@x_team_high_five_slack.builder.channel"
 
+
+    app.voter.link:
+        class: AppBundle\Voter\LinkVoter
+
+    app.slack.provider:
+         class: AppBundle\Provider\MessageProvider
+         arguments:
+            - "@x_team_slack_messenger.slack.api.client"
+            - "@x_team_slack_messenger.builder.api_object_message_builder"

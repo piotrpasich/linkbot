@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Event\LinkSentEvent;
 use AppBundle\Event\MesssageReceivedEvent;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -14,15 +15,13 @@ class DefaultController extends Controller
      */
     public function indexAction(Request $request)
     {
+
         $em = $this->get('doctrine.orm.default_entity_manager');
-        $lastHighFiveTimestamp = $em->getRepository('XTeamHighFiveSlackBundle:HighFive')->getLastTimeStamp() + 1;
+        $links = $em->getRepository('AppBundle:Link')->findAll();
 
-        $messages = $this
-            ->get('x_team_slack_messenger.slack.provider')
-            ->getMessagesFromAllChannels($lastHighFiveTimestamp, ['test2']); //@papi @todo
-
-        foreach ($messages as $message) {
-            $this->get('event_dispatcher')->dispatch(MesssageReceivedEvent::NAME, new MesssageReceivedEvent($message));
+        foreach ($links as $link) {
+            $this->get('event_dispatcher')->dispatch(LinkSentEvent::NAME, new LinkSentEvent($link));
+            $em->persist($link);
         }
 
         $em->flush();

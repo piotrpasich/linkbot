@@ -38,6 +38,16 @@ class Link
     private $slackId;
 
     /**
+     * @var Slack TimeStamp
+     */
+    private $slackTS;
+
+    /**
+     * @var int
+     */
+    private $reactionsCount = 0;
+
+    /**
      * Get id
      *
      * @return int
@@ -180,5 +190,37 @@ class Link
     public function setSlackId($slackId)
     {
         $this->slackId = $slackId;
+    }
+
+    /**
+     * @return Slack
+     */
+    public function getSlackTS()
+    {
+        return $this->slackTS;
+    }
+
+    /**
+     * @param Slack $slackTS
+     */
+    public function setSlackTS($slackTS)
+    {
+        $this->slackTS = $slackTS;
+    }
+
+    /**
+     * @return int
+     */
+    public function getReactionsCount()
+    {
+        return $this->reactionsCount;
+    }
+
+    /**
+     * @param int $reactionsCount
+     */
+    public function setReactionsCount($reactionsCount)
+    {
+        $this->reactionsCount = $reactionsCount;
     }
 }

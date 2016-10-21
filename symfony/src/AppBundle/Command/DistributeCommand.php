@@ -2,6 +2,7 @@
 
 namespace AppBundle\Command;
 
+use AppBundle\Event\LinkSentEvent;
 use AppBundle\Event\MesssageReceivedEvent;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputArgument;
@@ -13,13 +14,13 @@ use Symfony\Component\Filesystem\Exception\IOExceptionInterface;
 use Symfony\Component\HttpFoundation\Request;
 use XTeam\SlackMessengerBundle\Event\MessageEvent;
 
-class ParseCommand  extends ContainerAwareCommand
+class DistributeCommand  extends ContainerAwareCommand
 {
 
     protected function configure()
     {
         $this
-            ->setName('xteam:linkbot:parse:links')
+            ->setName('xteam:linkbot:distribute')
             ->setDescription('Parses messeges from slack')
         ;
     }
@@ -27,19 +28,15 @@ class ParseCommand  extends ContainerAwareCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $em = $this->getContainer()->get('doctrine.orm.default_entity_manager');
-        $lastHighFiveTimestamp = $em->getRepository('AppBundle:Link')->getLastTimeStamp();
+        $links = $em->getRepository('AppBundle:Link')->findAll();
 
-        $messages = $this
-            ->getContainer()
-            ->get('x_team_slack_messenger.slack.provider')
-            ->getMessagesFromAllChannels($lastHighFiveTimestamp, ['test2']); //@papi @todo
-
-        foreach ($messages as $message) {
-            $this->getContainer()->get('event_dispatcher')->dispatch(MesssageReceivedEvent::NAME, new MesssageReceivedEvent($message));
+        foreach ($links as $link) {
+            $this->getContainer()->get('event_dispatcher')->dispatch(LinkSentEvent::NAME, new LinkSentEvent($link));
+            $em->persist($link);
         }
 
         $em->flush();
 
-        $output->writeln(sprintf("%d messages received", count($messages)));
+        $output->writeln(sprintf("%d messages updated", count($links)));
     }
 }

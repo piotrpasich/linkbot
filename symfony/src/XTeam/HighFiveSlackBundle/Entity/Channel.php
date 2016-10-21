@@ -49,7 +49,7 @@ class Channel
 
     public function getSlackId()
     {
-        return $this->channelId;
+        return $this->slackId;
     }
 
     /**

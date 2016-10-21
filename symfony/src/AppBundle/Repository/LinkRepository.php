@@ -2,6 +2,7 @@
 
 namespace AppBundle\Repository;
 
+use AppBundle\Entity\Link;
 use Doctrine\ORM\EntityRepository;
 use XTeam\HighFiveSlackBundle\Entity\DataManipulator\Period;
 use XTeam\HighFiveSlackBundle\Statistic\HighFivesCollection;
@@ -49,5 +50,10 @@ class LinkRepository extends EntityRepository
         $highFive->setChannel($channel);
 
         return $highFive;
+    }
+
+    public function persist(Link $link)
+    {
+        return $this->getEntityManager()->persist($link);
     }
 }

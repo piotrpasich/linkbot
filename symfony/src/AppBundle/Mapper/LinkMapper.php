@@ -25,6 +25,8 @@ class LinkMapper
      */
     private $channelEntityBuilder;
 
+    const LINK_PATTERN = '<http[s]*://[a-zA-Z0-9:\/\.\?\&\=\-]+\.[a-zA-Z0-9]{2,10}[a-zA-Z0-9:\-\/\.\?\&\=\@]*>';
+
     public function __construct(
         UserEntityBuilder $userEntityBuilder,
         ChannelEntityBuilder $channelEntityBuilder
@@ -56,9 +58,16 @@ class LinkMapper
 
         $link->setCreatedAt($message->getCreatedAt());
         $link->setMessage($message->getText());
-        $link->setLink($message->getText()); //@papi @todo
+        $link->setSlackTS($message->getTs());
+
+        preg_match_all(self::LINK_PATTERN, $message->getText(), $matches);
+        if (!empty($matches[0])) {
+            $link->setLink($matches[0][0]);
+        }
+
         $link->setSlackId($message->getTs() . $message->getChannel()->getId());
 
         return $link;
     }
+
 }

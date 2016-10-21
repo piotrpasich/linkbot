@@ -21,3 +21,7 @@ parameters:
     xteam.highfive.message: "High five heroes! |chart|"
     xteam.highfive.base_url: "http://localhost"
     xteam.highfive.publish_channel: "#test"
+    slack.channels: ["general", "test2"]
+    slack.linkbot:
+      publish_channel: test2
+      name: LinkBot

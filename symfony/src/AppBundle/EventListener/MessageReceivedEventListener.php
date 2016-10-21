@@ -5,6 +5,7 @@ namespace AppBundle\EventListener;
 use AppBundle\Event\MesssageReceivedEvent;
 use AppBundle\Mapper\LinkMapper;
 use AppBundle\Repository\LinkRepository;
+use AppBundle\Voter\LinkVoter;
 use Doctrine\ORM\EntityManager;
 use Symfony\Component\EventDispatcher\Event;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -18,20 +19,20 @@ class MessageReceivedEventListener
     private $linkRepository;
 
     /**
-     * @var EntityManager
-     */
-    private $em;
-
-    /**
      * @var LinkMapper
      */
     private $linkMapper;
 
-    public function __construct(LinkRepository $linkRepository, EntityManager $em, LinkMapper $linkMapper)
+    /**
+     * @var LinkVoter
+     */
+    private $linkVoter;
+
+    public function __construct(LinkRepository $linkRepository, LinkMapper $linkMapper, LinkVoter $linkVoter)
     {
         $this->linkRepository = $linkRepository;
-        $this->em = $em;
         $this->linkMapper = $linkMapper;
+        $this->linkVoter = $linkVoter;
     }
 
     public function receiveMessage(MesssageReceivedEvent $messsageReceivedEvent)
@@ -45,9 +46,10 @@ class MessageReceivedEventListener
 
             $link = $this->linkMapper->getLink($message);
 
-            $this->em->persist($link);
+            if ($this->linkVoter->supports($link)) {
+                $this->linkRepository->persist($link);
+            }
         } catch (\Exception $e) {
-            throw $e;
             return false;
         }
     }
