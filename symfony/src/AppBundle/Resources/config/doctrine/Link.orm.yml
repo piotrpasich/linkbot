@@ -26,6 +26,9 @@ AppBundle\Entity\Link:
             type: integer
         sent:
             type: boolean
+        linkInfo:
+            type: object
+            nullable: true
     manyToOne:
         user:
             targetEntity: XTeam\HighFiveSlackBundle\Entity\User

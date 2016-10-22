@@ -50,6 +50,8 @@ class Link
      */
     private $reactionsCount = 0;
 
+    private $linkInfo;
+
     /**
      * Get id
      *
@@ -242,4 +244,22 @@ class Link
     {
         $this->sent = $sent;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getLinkInfo()
+    {
+        return $this->linkInfo;
+    }
+
+    /**
+     * @param mixed $linkInfo
+     */
+    public function setLinkInfo($linkInfo)
+    {
+        $this->linkInfo = $linkInfo;
+    }
+
+
 }
