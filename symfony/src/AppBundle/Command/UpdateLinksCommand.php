@@ -12,6 +12,8 @@ use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Filesystem\Exception\IOExceptionInterface;
 use Symfony\Component\HttpFoundation\Request;
 use XTeam\SlackMessengerBundle\Event\MessageEvent;
+use AppBundle\LinkParser\Consumer;
+use AppBundle\Entity\Link;
 
 class UpdateLinksCommand  extends ContainerAwareCommand
 {
@@ -27,19 +29,28 @@ class UpdateLinksCommand  extends ContainerAwareCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $em = $this->getContainer()->get('doctrine.orm.default_entity_manager');
-        $lastHighFiveTimestamp = $em->getRepository('AppBundle:Link')->getLastTimeStamp();
+        $links = $em->getRepository('AppBundle:Link')->findBy(['status' => [Link::STATUS_BROKEN, Link::STATUS_NEW]]);
 
-        $messages = $this
-            ->getContainer()
-            ->get('x_team_slack_messenger.slack.provider')
-            ->getMessagesFromAllChannels($lastHighFiveTimestamp, $this->getContainer()->getParameter('slack.channels'));
+        foreach ($links as $id => $link) {
+            try {
+                $consumer = new Consumer();
 
-        foreach ($messages as $message) {
-            $this->getContainer()->get('event_dispatcher')->dispatch(MesssageReceivedEvent::NAME, new MesssageReceivedEvent($message));
+                $output->writeln(sprintf("[%d|%d] %s", $id, count($links), $link->getLink()));
+
+                $object = $consumer->loadUrl($link->getLink());
+                $link->setType($object->type);
+                $link->setLinkInfo($object);
+                $link->setStatus($link::STATUS_READY);
+            } catch (\Exception $e) {
+                $output->writeln($e->getMessage());
+                $link->setStatus($link::STATUS_BROKEN);
+            }
+
+            $em->persist($link);
         }
 
         $em->flush();
 
-        $output->writeln(sprintf("%d messages received", count($messages)));
+        $output->writeln('Done');
     }
 }

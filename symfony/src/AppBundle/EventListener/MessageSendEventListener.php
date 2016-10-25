@@ -8,6 +8,8 @@ use AppBundle\Message\AuthorMessage;
 use AppBundle\Message\WebsiteMessage;
 use AppBundle\Repository\LinkRepository;
 use AppBundle\Voter\LinkVoter;
+use CL\Slack\Model\Attachment;
+use CL\Slack\Model\AttachmentField;
 use CL\Slack\Payload\ChatPostMessagePayload;
 use Doctrine\ORM\EntityManager;
 use Symfony\Component\EventDispatcher\Event;
@@ -35,19 +37,41 @@ class MessageSendEventListener
 
     public function sentMessage(LinkSentEvent $linkSentEvent)
     {
-        $link = $linkSentEvent->getLink();
+        try {
+            $link = $linkSentEvent->getLink();
 
-        $payload = new ChatPostMessagePayload();
-        $payload->setChannel($this->configuration['publish_channel']);
-        $payload->setUsername($this->configuration['name']);
-        $payload->setIconUrl($link->getUser()->getImage());
-        $payload->setAsUser(false);
+            $attachment = new Attachment();
+            $attachment->setTitle($link->getLinkInfo()->title);
+            $attachment->setText(urldecode($link->getLinkInfo()->description));
+            $attachment->setAuthorName($link->getUser()->getName());
+            $attachment->setTitleLink($link->getLink());
+            $attachment->setFooter(sprintf('#%s', $link->getChannel()->getName()));
+            $attachment->setColor("#36a64f");
 
-        $message = new AuthorMessage($link);
-        $payload->setText($message->getMessage());
+            $field = new AttachmentField();
+            $field->setTitle('Reactions');
+            $field->setValue($link->getReactionsCount());
 
-        $this->apiMessagePublisher->publishPayload($payload);
+            $attachment->addField($field);
 
-        $link->setSent(true);
+            if ('image' == $link->getType()) {
+                $attachment->setImageUrl($link->getLink());
+            } else if (isset($link->getLinkInfo()->images[0])) {
+                $attachment->setImageUrl($link->getLinkInfo()->images[0]->url);
+            }
+
+            $payload = new ChatPostMessagePayload();
+            $payload->addAttachment($attachment);
+            $payload->setChannel($this->configuration['publish_channel']);
+            $payload->setUsername($this->configuration['name']);
+            $payload->setIconUrl($link->getUser()->getImage());
+            $payload->setAsUser(false);
+
+            $this->apiMessagePublisher->publishPayload($payload);
+
+            $link->setSent(true);
+        } catch (\Exception $e) {
+
+        }
     }
 }

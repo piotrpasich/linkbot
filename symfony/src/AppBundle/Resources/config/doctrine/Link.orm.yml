@@ -29,6 +29,13 @@ AppBundle\Entity\Link:
         linkInfo:
             type: object
             nullable: true
+        type:
+            type: string
+            length: 50
+            nullable: true
+        status:
+            type: string
+            length: 50
     manyToOne:
         user:
             targetEntity: XTeam\HighFiveSlackBundle\Entity\User

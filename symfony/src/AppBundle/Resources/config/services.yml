@@ -38,3 +38,8 @@ services:
          arguments:
             - "@x_team_slack_messenger.slack.api.client"
             - "@x_team_slack_messenger.builder.api_object_message_builder"
+
+    app.twig.custom_extension:
+         class: AppBundle\Twig\htmlEntityDecodeExtension
+         tags:
+            - { name: twig.extension }

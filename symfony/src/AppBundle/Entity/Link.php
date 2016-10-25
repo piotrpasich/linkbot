@@ -52,6 +52,13 @@ class Link
 
     private $linkInfo;
 
+    private $type;
+
+    private $status = SELF::STATUS_NEW;
+
+    CONST STATUS_NEW = 'new';
+    CONST STATUS_READY = 'ready';
+    CONST STATUS_BROKEN = 'broken';
     /**
      * Get id
      *
@@ -261,5 +268,36 @@ class Link
         $this->linkInfo = $linkInfo;
     }
 
+    /**
+     * @return mixed
+     */
+    public function getType()
+    {
+        return $this->type;
+    }
+
+    /**
+     * @param mixed $type
+     */
+    public function setType($type)
+    {
+        $this->type = $type;
+    }
+
+    /**
+     * @return string
+     */
+    public function getStatus()
+    {
+        return $this->status;
+    }
+
+    /**
+     * @param string $status
+     */
+    public function setStatus($status)
+    {
+        $this->status = $status;
+    }
 
 }

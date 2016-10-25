@@ -31,7 +31,10 @@ class ReactionsCommand  extends ContainerAwareCommand
 
         foreach ($links as $link) {
             $reactions = $this->getContainer()->get('app.slack.provider')->getReactions($link);
-            $link->setReactionsCount(count($reactions));
+            $reactions = array_sum(array_map(function($reaction) {
+                return $reaction['count'];
+            }, $reactions));
+            $link->setReactionsCount($reactions);
 
             $em->persist($link);
         }

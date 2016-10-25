@@ -18,17 +18,21 @@
                             {% if link.linkInfo.images.0 is defined %}
                                 <img src="{{ link.linkInfo.images.0.url }}" style="width:150px;"/>
                             {% endif %}
+
+                            {% if link.type == 'image' %}
+                                <img src="{{ link.link }}" style="width:150px;"/>
+                            {% endif %}
                         </div>
                         <div style="float:right;width:70%">
                             <h2><a target="_blank" href="{{ link.link }}">{{ link.linkInfo.title }}</a></h2>
                             <p>
-                                {{ link.linkInfo.description }}
+                                {{ link.linkInfo.description|html_entity_decode }}
                             </p>
 
                         </div>
                         <br style="clear:both"/>
                         <p style="text-align: right;font-size:10px">
-                            Sent by {{ link.user.name }} at #{{ link.channel.name }}
+                            Sent by {{ link.user.name }} at #{{ link.channel.name }}, {{ link.reactionsCount }} reactions
                         </p>
                     </div>
                     <hr style="clear:both"/>

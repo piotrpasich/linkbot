@@ -19,27 +19,7 @@ class DefaultController extends Controller
     {
 
         $em = $this->get('doctrine.orm.default_entity_manager');
-        $links = $em->getRepository('AppBundle:Link')->findAll();
-
-        foreach ($links as $id => $link) {
-            if (null == $link->getLinkInfo()) {
-                try {
-                    $consumer = new Consumer();
-                    $object = $consumer->loadUrl($link->getLink());
-                    $link->setLinkInfo($object);
-                    $em->persist($link);
-                } catch (\Exception $e) {
-                    unset($links[$id]);
-                }
-
-            }
-
-            if (null == $link->getLinkInfo()->title) {
-                unset($links[$id]);
-            }
-        }
-
-        $em->flush();
+        $links = $em->getRepository('AppBundle:Link')->findReady();
 
         // replace this example code with whatever you need
         return $this->render('default/index.html.twig', [

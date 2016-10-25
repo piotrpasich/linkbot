@@ -25,7 +25,7 @@ class LinkMapper
      */
     private $channelEntityBuilder;
 
-    const LINK_PATTERN = '<http[s]*://[a-zA-Z0-9:\/\.\?\&\=\-]+\.[a-zA-Z0-9]{2,10}[a-zA-Z0-9:\-\/\.\?\&\=\@]*>';
+    const LINK_PATTERN = '<http[s]*://[a-zA-Z0-9:\/\.\?\&\=\-]+\.[a-zA-Z0-9]{2,10}[a-zA-Z0-9:\-\/\.\?\&\=\@\#\_\-]*>';
 
     public function __construct(
         UserEntityBuilder $userEntityBuilder,

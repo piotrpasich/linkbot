@@ -61,4 +61,18 @@ class LinkRepository extends EntityRepository
     {
         return $this->findBy(['sent' => 0]);
     }
+
+
+    public function findReady()
+    {
+        $qb = $this->createQueryBuilder('l');
+
+        return $qb
+            ->andWhere('l.status = :status')
+            ->setParameter('status', Link::STATUS_READY)
+            ->andWhere($qb->expr()->isNotNull('l.linkInfo'))
+            ->orderBy('l.createdAt', 'desc')
+            ->getQuery()
+            ->getResult();
+    }
 }
