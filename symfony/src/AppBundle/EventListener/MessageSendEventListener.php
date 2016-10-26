@@ -42,7 +42,7 @@ class MessageSendEventListener
 
             $attachment = new Attachment();
             $attachment->setTitle($link->getLinkInfo()->title);
-            $attachment->setText(urldecode($link->getLinkInfo()->description));
+            $attachment->setText($link->getMessage() . '|' . urldecode($link->getLinkInfo()->description));
             $attachment->setAuthorName($link->getUser()->getName());
             $attachment->setTitleLink($link->getLink());
             $attachment->setFooter(sprintf('#%s', $link->getChannel()->getName()));

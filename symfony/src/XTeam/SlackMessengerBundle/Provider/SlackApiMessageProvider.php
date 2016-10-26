@@ -6,6 +6,7 @@ use CL\Slack\Model\MessageResultItem;
 use CL\Slack\Model\SimpleMessage;
 use CL\Slack\Payload\ChannelsHistoryPayload;
 use CL\Slack\Payload\ChannelsListPayload;
+use CL\Slack\Payload\FilesInfoPayload;
 use CL\Slack\Payload\SearchMessagesPayload;
 use CL\Slack\Transport\ApiClientInterface;
 use XTeam\SlackMessengerBundle\Adapter\SimpleMessageAdapter;
@@ -59,6 +60,18 @@ class SlackApiMessageProvider
         } else {
             throw new SlackApiException($response->getError());
         }
+    }
+
+    public function getFileInfo($fileUrl)
+    {
+        $fileId = explode('/', $fileUrl)[5];
+        $fileId = 'F2SS1SBK6';
+        $file = new FilesInfoPayload();
+        $file->setFileId($fileId);
+
+        $file = $this->apiClient->send($file)->getFile();
+
+        return $file;
     }
 
     public function getMessagesFromAllChannels($sinceTimestamp = null, $allowedChannels = [])

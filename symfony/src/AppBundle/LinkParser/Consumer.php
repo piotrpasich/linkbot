@@ -2,6 +2,7 @@
 
 namespace AppBundle\LinkParser;
 
+use CL\Slack\Payload\FilesInfoPayload;
 use Fusonic\Linq\Linq;
 use Fusonic\OpenGraph\Objects\ObjectBase;
 use Fusonic\OpenGraph\Objects\Website;
@@ -10,6 +11,7 @@ use GuzzleHttp\Adapter\AdapterInterface;
 use GuzzleHttp\Client;
 use Symfony\Component\CssSelector\CssSelectorConverter;
 use Symfony\Component\DomCrawler\Crawler;
+use XTeam\SlackMessengerBundle\Provider\SlackApiMessageProvider;
 
 /**
  * Consumer that extracts Open Graph data from either a URL or a HTML string.
@@ -20,10 +22,16 @@ class Consumer extends \Fusonic\OpenGraph\Consumer
     private $client;
 
     /**
+     * @var SlackApiMessageProvider
+     */
+    private $slackApiMessageProvider;
+
+    /**
      * @param   AdapterInterface    $adapter        Guzzle adapter to use for making HTTP requests.
      */
-    public function __construct(AdapterInterface $adapter = null)
+    public function __construct(SlackApiMessageProvider $slackApiMessageProvider, AdapterInterface $adapter = null)
     {
+        $this->slackApiMessageProvider = $slackApiMessageProvider;
         $this->client = new Client(
             [
                 "timeout" => 10,
@@ -51,8 +59,7 @@ class Consumer extends \Fusonic\OpenGraph\Consumer
             $data->type = 'image';
         } else if (false !== strpos($url, 'https://x-team.slack.com/files/')) {
             $data->type = 'image';
-            $data->url = $this->loadSlackImage($response->getBody()->__toString());
-            var_dump($url);die();
+            $data->url = $this->loadSlackImage($url);
         } else {
             try {
                 if (null == $data->title) {
@@ -91,14 +98,13 @@ class Consumer extends \Fusonic\OpenGraph\Consumer
     }
 
 
-    private function loadSlackImage($content)
+    private function loadSlackImage($url)
     {
-//        $crawler = new Crawler($content);
-
         //@todo download image from slack
-        throw new \Exception('Slack images not implemented yet');
 
-        return '';
+        $file = $this->slackApiMessageProvider->getFileInfo($url);
+
+        return $file->getUrlPrivate();
     }
 }
 //file_page_image

@@ -41,6 +41,7 @@ class MessageReceivedEventListener
 
         try {
             if ($this->linkRepository->getMatch($message)) {
+                $link = $this->linkMapper->getLink($message);
                 return false;
             }
 

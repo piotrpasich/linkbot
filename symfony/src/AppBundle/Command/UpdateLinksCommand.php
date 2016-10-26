@@ -33,11 +33,14 @@ class UpdateLinksCommand  extends ContainerAwareCommand
 
         foreach ($links as $id => $link) {
             try {
-                $consumer = new Consumer();
+                $consumer = new Consumer($this->getContainer()->get('x_team_slack_messenger.slack.provider'));
 
                 $output->writeln(sprintf("[%d|%d] %s", $id, count($links), $link->getLink()));
 
                 $object = $consumer->loadUrl($link->getLink());
+                if ('image' == $object->type) {
+                    $link->setLink($object->url);
+                }
                 $link->setType($object->type);
                 $link->setLinkInfo($object);
                 $link->setStatus($link::STATUS_READY);

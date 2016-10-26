@@ -19,9 +19,15 @@ class LinkRepository extends EntityRepository
 {
     public function getMatch(Message $message)
     {
-        return $this->findOneBy([
-            'slackId' => $message->getTs() . $message->getChannel()->getId(),
-        ]);
+        $qb = $this->createQueryBuilder('l');
+
+        return $qb
+            ->andWhere('l.slackId = :slackId')
+            ->setParameter('slackId', $message->getTs() . $message->getChannel()->getId())
+            ->orWhere('l.message = :message')
+            ->setParameter('message', $message->getText())
+            ->getQuery()
+            ->getFirstResult();
     }
 
     public function getLastTimeStamp()
@@ -62,6 +68,28 @@ class LinkRepository extends EntityRepository
         return $this->findBy(['sent' => 0]);
     }
 
+    public function findUnsentByDate(\DateTime $date = null)
+    {
+        if (null == $date) {
+            $date = new \DateTime();
+        }
+
+        $qb = $this->createQueryBuilder('l');
+
+        return $qb
+            ->andWhere('l.status = :status')
+            ->setParameter('status', Link::STATUS_READY)
+            ->andWhere('l.sent = 0')
+            ->andWhere($qb->expr()->isNotNull('l.linkInfo'))
+            ->andWhere('date(l.createdAt) = :today')
+            ->setParameter('today',$date->format('Y-m-d'))
+            ->orderBy('l.reactionsCount', 'desc')
+            ->groupBy('l.link')
+            ->setMaxResults(5)
+            ->getQuery()
+            ->getResult();
+
+    }
 
     public function findReady()
     {
@@ -72,6 +100,7 @@ class LinkRepository extends EntityRepository
             ->setParameter('status', Link::STATUS_READY)
             ->andWhere($qb->expr()->isNotNull('l.linkInfo'))
             ->orderBy('l.createdAt', 'desc')
+            ->groupBy('l.link')
             ->getQuery()
             ->getResult();
     }
